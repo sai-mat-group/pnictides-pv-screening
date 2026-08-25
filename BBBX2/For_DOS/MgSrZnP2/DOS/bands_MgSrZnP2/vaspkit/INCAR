@@ -1,0 +1,66 @@
+#HSE06 BAND STRUCTURE calculation for A4BX2
+#Listed below are suitable modifications of INCAR required for doing other functional calculations
+#
+#Algorithms and convergence criteria (usually requires minor tweaks)
+ALGO = All #Algorithm for doing "electronic" steps (inner loop)  
+EDIFF = 1E-6 #Convergence criterion for energy, relevant for inner loop (in eV)
+#EDIFFG = -0.01 #Convergence criterion for outer loop (i.e., "ionic" steps). Negative sign indicates max force between atoms in eV/A.
+ENCUT = 520 #Max energy of plane-waves used in basis set (in eV)
+IBRION = -1 #Algorithm for moving ions after each inner loop
+ICHARG = 1 #Initial guess for electron density
+ISIF = 3 #What parameters in the cell should I "relax"? Just the ions or the volume and shape as well?
+ISYM = 0 #Should VASP preserve symmetry during relaxation?
+ISPIN = 2 #Spin-polarized calculation?
+LREAL = False #Should "projection" operators be calculated in real-space?
+NELMIN = 6 #Minimum number of electronic steps per inner loop
+NELM = 100 #Maximum number of electronic steps per inner loop
+#NSW = 99 #Maximum number of steps for the outer loop
+PREC = Accurate #Maintain a high level of precision in wave-functions used while going to reciprocal space
+ISMEAR = 0 #Smearing --useful in getting convergence in metals
+SIGMA = 0.05 #Extent of smearing (in eV).
+GGA = PE
+NEDOS = 1000
+ISTART = 1
+
+#For Si: system specifications (**changes with system**)
+MAGMOM = 5*0.06
+#Assuming Co4+ is in a low-spin ferromagnetic configuration. Usually Co3+ (in LiCoO2) is in a low-spin (d6) non-magnetic configuration
+#If you have a non-magnetic ion (e.g., Li+/O2-), always give the initial MAGMOM as a non-zero value here, helps in convergence.
+
+#I-O (usually not changed)
+LWAVE = False #Should wave-functions be explicitly written in an output file?
+LORBIT = 11 #How should orbital projections of wave-functions be output? Useful since this also outputs magnetic moments on each atom.
+
+#For computational performance (usually changed only when moving calculations to a new machine)
+LPLANE = True  #How is parallel computing done across FFTs
+NCORE = 8 #Parallelization across bands
+NSIM = 4 #Speed up convergence by optimizing matrix-matrix operations
+
+#Functional-based keywords
+#For changing XC functional, adding U corrections, etc.
+#
+#For SCAN/SCAN+U calculations, the following 2 keywords are important
+#METAGGA = SCAN
+
+HFSCREEN = 0.2
+LHFCALC = True
+PRECFOCK = Fast
+TIME = 0.4
+AEXX = 0.25
+AGGAX = 0.75
+AGGAC = 1.0
+ALDAC = 1.0
+
+
+
+#For any calculation with a +U correction, the following keywords are needed (please remove them if not doing a +U calculation)
+#LDAU = TRUE # TURNS ON Dft +u CALCULATION
+#LDAUTYPE = 2 # What type of DFT +U theory used
+#LDAUU = 0 3 # SPecifies U parameter value for each species in POSCAR file
+#LDAUJ = 0 0   # J parameter of DFT +U Claculation , by default its ZERO for all elements
+#LDAUL = -1 2 # Which orbital we are applying U correction
+#LDAUPRINT = 1 # Defines Printing
+#LMAXMIX = 4 # Its a way to help DFT converging calculation, Mixing paramters
+
+# GGA :No command, SCAN : meta GGA without 7 commnads line, SCAN +U =meta GG+7 KEYWORDS, gga+u = NO META GGA + 7 KEY WORDS,
+#U for Mn is 3.9 in GGA+U while U = 2.7 in SCAN +U
